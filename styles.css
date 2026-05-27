@@ -153,6 +153,34 @@ button.primary {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.next-focus-panel {
+  margin-top: 1rem;
+}
+
+.next-focus-card {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.next-focus-card h2,
+.next-focus-card p {
+  margin: 0;
+}
+
+.next-focus-card h2 {
+  font-size: 1.65rem;
+}
+
+.focus-label {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .results-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

@@ -31,5 +31,14 @@ test("sample builds route and markdown", () => {
   const analysis = analyzeTopicSheet(sampleTopicSheet);
   assert.ok(analysis.route[0].topics.length >= 2);
   assert.ok(analysis.route[1].topics.some((topic) => topic.title === "Signals and noise"));
+  assert.equal(analysis.nextFocus.title, "Sampling rate");
+  assert.match(analysis.nextFocusHtml, /Repair first/);
+  assert.match(analysis.markdown, /## Next Focus/);
   assert.match(analysis.markdown, /## Study Route/);
+});
+
+test("next focus prioritizes input issues before study advice", () => {
+  const analysis = analyzeTopicSheet("A | Missing | 2 |");
+  assert.equal(analysis.nextFocus.title, "Fix input issues");
+  assert.match(analysis.nextFocus.reason, /1 cycle or format issue/);
 });

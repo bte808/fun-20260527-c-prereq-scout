@@ -9,6 +9,7 @@ It runs entirely in the browser with static HTML, CSS, and JavaScript. No login,
 - Parse a plain-text topic sheet: `Topic | prereq1, prereq2 | confidence 0-4 | note`
 - Detect missing prerequisites and prerequisite cycles
 - Highlight low-confidence bottlenecks that block later topics
+- Recommend one "next focus" topic or input fix before the full route
 - Separate "repair first", "ready now", and "extend later" study buckets
 - Draw a dependency graph that shows what unlocks what
 - Export a Markdown study plan for notes, lab logs, or review pages
@@ -65,7 +66,7 @@ The validation covers parsing, missing prerequisites, cycle detection, route gen
 2. Replace the sample with your own chapter or methods topic list.
 3. Rate each topic from `0` to `4`.
 4. Build the plan.
-5. Review bottlenecks first, then the ready-now bucket.
+5. Start with the Next Focus card, then review bottlenecks and the ready-now bucket.
 6. Copy or download the Markdown plan into your notes.
 
 Your topic sheet is saved only in this browser's local storage, so a refresh will

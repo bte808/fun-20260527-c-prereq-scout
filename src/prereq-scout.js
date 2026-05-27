@@ -227,7 +227,55 @@ function buildRoute(topics, map) {
   ];
 }
 
-function buildMarkdown(topics, bottlenecks, route, errors) {
+function buildNextFocus(route, errors) {
+  if (errors.length) {
+    return {
+      title: "Fix input issues",
+      label: "Check sheet",
+      reason: `Resolve ${errors.length} cycle or format issue(s) before trusting the route.`,
+      detail: "Use the input issues card to fix lines, unknown prerequisites, or cycles.",
+      topic: null
+    };
+  }
+
+  const [repairStage, readyStage, extendStage] = route;
+  const repairTopic = repairStage.topics[0];
+  if (repairTopic) {
+    return {
+      title: repairTopic.title,
+      label: "Repair first",
+      reason: `This fragile topic unlocks ${repairTopic.blocksCount} later topic(s).`,
+      detail: repairTopic.note || "Stabilize the prerequisite before moving deeper.",
+      topic: repairTopic
+    };
+  }
+
+  const readyTopic = readyStage.topics[0];
+  if (readyTopic) {
+    return {
+      title: readyTopic.title,
+      label: "Study next",
+      reason: "Its prerequisites look stable enough for a focused pass.",
+      detail: readyTopic.note || "Use this as the next reachable study item.",
+      topic: readyTopic
+    };
+  }
+
+  const extendTopic = extendStage.topics[0];
+  if (extendTopic) {
+    return {
+      title: extendTopic.title,
+      label: "Teach back",
+      reason: "No weak blockers remain, so synthesis is the highest-value move.",
+      detail: extendTopic.note || "Explain it aloud or connect it to a later example.",
+      topic: extendTopic
+    };
+  }
+
+  return null;
+}
+
+function buildMarkdown(topics, bottlenecks, route, errors, nextFocus) {
   const lines = [
     "# Prereq Scout Plan",
     "",
@@ -239,6 +287,22 @@ function buildMarkdown(topics, bottlenecks, route, errors) {
 
   if (errors.length) {
     lines.push("## Input Issues", "", ...errors.map((error) => `- ${error}`), "");
+  }
+
+  lines.push("## Next Focus", "");
+  if (nextFocus) {
+    const confidenceText = nextFocus.topic
+      ? ` (${nextFocus.topic.confidenceLabel}, confidence ${nextFocus.topic.confidence})`
+      : "";
+    lines.push(
+      `- **${nextFocus.title}**${confidenceText}`,
+      `- Step: ${nextFocus.label}`,
+      `- Why: ${nextFocus.reason}`,
+      `- Detail: ${nextFocus.detail}`,
+      ""
+    );
+  } else {
+    lines.push("- Add at least one topic to get a focus recommendation.", "");
   }
 
   lines.push("## Bottlenecks", "");
@@ -333,6 +397,32 @@ function renderBottlenecks(bottlenecks) {
       </article>`
     )
     .join("");
+}
+
+function renderNextFocus(nextFocus) {
+  if (!nextFocus) {
+    return '<p class="empty-state">Add at least one topic to get a focus recommendation.</p>';
+  }
+
+  const confidenceChip = nextFocus.topic
+    ? `<span class="chip ${confidenceChipClass(nextFocus.topic.confidence)}">${nextFocus.topic.confidenceLabel}</span>`
+    : '<span class="chip low">input check</span>';
+  const unlockChip = nextFocus.topic
+    ? `<span class="chip">unlocks ${nextFocus.topic.blocksCount}</span>`
+    : "";
+
+  return `<article class="next-focus-card">
+    <div>
+      <span class="focus-label">${escapeHtml(nextFocus.label)}</span>
+      <h2>${escapeHtml(nextFocus.title)}</h2>
+    </div>
+    <p>${escapeHtml(nextFocus.reason)}</p>
+    <p>${escapeHtml(nextFocus.detail)}</p>
+    <div class="chips">
+      ${confidenceChip}
+      ${unlockChip}
+    </div>
+  </article>`;
 }
 
 function confidenceColor(confidence) {
@@ -440,14 +530,17 @@ export function analyzeTopicSheet(input) {
     .filter((topic) => topic.confidence <= 2 && topic.blocksCount > 0)
     .sort((a, b) => b.blocksCount - a.blocksCount || a.confidence - b.confidence)
     .slice(0, 6);
-  const markdown = buildMarkdown(topo, bottlenecks, route, errors);
+  const nextFocus = buildNextFocus(route, errors);
+  const markdown = buildMarkdown(topo, bottlenecks, route, errors, nextFocus);
 
   return {
     topics: topo,
     errors,
     bottlenecks,
     route,
+    nextFocus,
     graphSvg: renderGraph(topo, map),
+    nextFocusHtml: renderNextFocus(nextFocus),
     routeHtml: renderRoute(route),
     bottleneckHtml: renderBottlenecks(bottlenecks),
     markdown,

@@ -8,6 +8,7 @@ const routeOutput = document.querySelector("#route-output");
 const bottleneckOutput = document.querySelector("#bottleneck-output");
 const graphOutput = document.querySelector("#graph-output");
 const markdownOutput = document.querySelector("#markdown-output");
+const nextFocusOutput = document.querySelector("#next-focus-output");
 const copyButton = document.querySelector("#copy-markdown");
 const downloadButton = document.querySelector("#download-markdown");
 const copyStatus = document.querySelector("#copy-status");
@@ -82,6 +83,7 @@ function runAnalysis() {
   statIssues.textContent = String(analysis.errors.length);
 
   routeOutput.innerHTML = `${createIssuesHtml(analysis.errors)}${analysis.routeHtml}`;
+  nextFocusOutput.innerHTML = analysis.nextFocusHtml;
   bottleneckOutput.innerHTML = analysis.bottleneckHtml;
   graphOutput.innerHTML = analysis.graphSvg;
   markdownOutput.value = analysis.markdown;
