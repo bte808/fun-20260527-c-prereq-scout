@@ -1,0 +1,19 @@
+{
+  "name": "fun-20260527-c-prereq-scout",
+  "version": "1.0.0",
+  "description": "A local prerequisite-aware study planner for course review.",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test"
+  },
+  "keywords": [
+    "study",
+    "prerequisites",
+    "review",
+    "learning",
+    "education"
+  ],
+  "license": "MIT"
+}

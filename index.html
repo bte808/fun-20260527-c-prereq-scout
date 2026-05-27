@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prereq Scout</title>
+    <meta
+      name="description"
+      content="Map topic prerequisites and confidence ratings into a concrete study route."
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Local study planner</p>
+        <h1>Prereq Scout</h1>
+        <p class="lede">
+          Paste a small concept list with prerequisites and self-ratings. The
+          app turns it into an unlock plan, bottleneck list, graph, and study
+          log you can export.
+        </p>
+        <div class="hero-actions">
+          <button id="load-sample" type="button">Load sample</button>
+          <button id="analyze" class="primary" type="button">Build plan</button>
+        </div>
+      </section>
+
+      <section class="panel input-panel">
+        <div class="panel-head">
+          <h2>Topic Sheet</h2>
+          <p>Format: <code>Topic | prereq1, prereq2 | confidence 0-4 | note</code></p>
+        </div>
+        <textarea id="topic-input" spellcheck="false"></textarea>
+      </section>
+
+      <section class="summary-grid" id="summary-grid">
+        <article class="panel stat-card">
+          <span class="stat-label">Topics</span>
+          <strong id="stat-topics">0</strong>
+        </article>
+        <article class="panel stat-card">
+          <span class="stat-label">Ready now</span>
+          <strong id="stat-ready">0</strong>
+        </article>
+        <article class="panel stat-card">
+          <span class="stat-label">Bottlenecks</span>
+          <strong id="stat-bottlenecks">0</strong>
+        </article>
+        <article class="panel stat-card">
+          <span class="stat-label">Cycle/format issues</span>
+          <strong id="stat-issues">0</strong>
+        </article>
+      </section>
+
+      <section class="results-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Study Route</h2>
+            <p>Start with blockers, then move through unlocked topics.</p>
+          </div>
+          <div id="route-output" class="list-stack empty-state">
+            Load the sample or paste your own sheet to begin.
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Bottlenecks</h2>
+            <p>Topics with low confidence that block later work.</p>
+          </div>
+          <div id="bottleneck-output" class="list-stack empty-state">
+            No analysis yet.
+          </div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Dependency Graph</h2>
+          <p>Edges point from prerequisite to later topic.</p>
+        </div>
+        <div id="graph-output" class="graph-shell empty-state">No graph yet.</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Markdown Plan</h2>
+          <p>Copy into notes, a lab log, or a course review page.</p>
+        </div>
+        <div class="export-actions">
+          <button id="copy-markdown" type="button">Copy Markdown</button>
+          <button id="download-markdown" type="button">Download .md</button>
+          <span id="copy-status" class="copy-status" aria-live="polite"></span>
+        </div>
+        <textarea id="markdown-output" readonly spellcheck="false"></textarea>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
