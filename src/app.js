@@ -1,5 +1,5 @@
 import { sampleTopicSheet } from "./sample-data.js";
-import { analyzeTopicSheet } from "./prereq-scout.js";
+import { analyzeTopicSheet, escapeHtml } from "./prereq-scout.js";
 
 const input = document.querySelector("#topic-input");
 const analyzeButton = document.querySelector("#analyze");
@@ -17,10 +17,36 @@ const statReady = document.querySelector("#stat-ready");
 const statBottlenecks = document.querySelector("#stat-bottlenecks");
 const statIssues = document.querySelector("#stat-issues");
 
+const draftKey = "prereq-scout-topic-sheet-v1";
 let currentMarkdown = "";
+let saveTimer;
+
+function setStatus(message) {
+  copyStatus.textContent = message;
+}
+
+function persistDraft(message = "Draft saved locally.") {
+  try {
+    localStorage.setItem(draftKey, input.value);
+    if (message) {
+      setStatus(message);
+    }
+  } catch {
+    setStatus("Local draft storage is unavailable in this browser.");
+  }
+}
+
+function restoreDraft() {
+  try {
+    return localStorage.getItem(draftKey);
+  } catch {
+    return null;
+  }
+}
 
 function setSample() {
   input.value = sampleTopicSheet;
+  persistDraft("Sample loaded and saved locally.");
   runAnalysis();
 }
 
@@ -42,7 +68,7 @@ function createIssuesHtml(errors) {
   return `<article class="route-item">
     <h3>Input issues</h3>
     <div class="chips"><span class="chip low">${errors.length} issue(s)</span></div>
-    <ul>${errors.map((error) => `<li>${error}</li>`).join("")}</ul>
+    <ul>${errors.map((error) => `<li>${escapeHtml(error)}</li>`).join("")}</ul>
   </article>`;
 }
 
@@ -59,20 +85,20 @@ function runAnalysis() {
   bottleneckOutput.innerHTML = analysis.bottleneckHtml;
   graphOutput.innerHTML = analysis.graphSvg;
   markdownOutput.value = analysis.markdown;
-  copyStatus.textContent = analysis.summary;
+  setStatus(analysis.summary);
 }
 
 async function copyMarkdown() {
   if (!currentMarkdown) {
-    copyStatus.textContent = "Build a plan first.";
+    setStatus("Build a plan first.");
     return;
   }
 
   try {
     await navigator.clipboard.writeText(currentMarkdown);
-    copyStatus.textContent = "Markdown copied.";
+    setStatus("Markdown copied.");
   } catch {
-    copyStatus.textContent = "Clipboard unavailable. Use Download .md instead.";
+    setStatus("Clipboard unavailable. Use Download .md instead.");
   }
 }
 
@@ -81,11 +107,11 @@ analyzeButton.addEventListener("click", runAnalysis);
 copyButton.addEventListener("click", copyMarkdown);
 downloadButton.addEventListener("click", () => {
   if (!currentMarkdown) {
-    copyStatus.textContent = "Build a plan first.";
+    setStatus("Build a plan first.");
     return;
   }
   downloadText("prereq-scout-plan.md", currentMarkdown);
-  copyStatus.textContent = "Markdown downloaded.";
+  setStatus("Markdown downloaded.");
 });
 
 input.addEventListener("keydown", (event) => {
@@ -94,4 +120,16 @@ input.addEventListener("keydown", (event) => {
   }
 });
 
-setSample();
+input.addEventListener("input", () => {
+  window.clearTimeout(saveTimer);
+  saveTimer = window.setTimeout(() => persistDraft(), 250);
+});
+
+const restoredDraft = restoreDraft();
+if (restoredDraft !== null) {
+  input.value = restoredDraft;
+  runAnalysis();
+  setStatus("Restored your local draft.");
+} else {
+  setSample();
+}

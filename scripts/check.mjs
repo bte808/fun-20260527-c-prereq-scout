@@ -43,6 +43,10 @@ if (!readme.includes("DAG-based Kanji learning") || !readme.includes("example da
   throw new Error("README needs inspiration and sample-data caveats");
 }
 
+if (!readme.includes("local storage") || !app.includes("prereq-scout-topic-sheet-v1")) {
+  throw new Error("Local draft persistence is not documented and wired");
+}
+
 if (!css.includes("@media (max-width: 560px)")) {
   throw new Error("Mobile layout media query is missing");
 }

@@ -17,7 +17,7 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return value
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")

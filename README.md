@@ -12,6 +12,7 @@ It runs entirely in the browser with static HTML, CSS, and JavaScript. No login,
 - Separate "repair first", "ready now", and "extend later" study buckets
 - Draw a dependency graph that shows what unlocks what
 - Export a Markdown study plan for notes, lab logs, or review pages
+- Restore your last topic-sheet draft from local browser storage after refreshes
 
 ## Good Study And Research Uses
 
@@ -66,6 +67,10 @@ The validation covers parsing, missing prerequisites, cycle detection, route gen
 4. Build the plan.
 5. Review bottlenecks first, then the ready-now bucket.
 6. Copy or download the Markdown plan into your notes.
+
+Your topic sheet is saved only in this browser's local storage, so a refresh will
+bring back the latest draft without uploading it anywhere. Use **Load sample** if
+you want to overwrite the draft with the bundled example again.
 
 Example input:
 

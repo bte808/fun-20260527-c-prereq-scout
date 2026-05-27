@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { analyzeTopicSheet, parseTopicSheet } from "../src/prereq-scout.js";
+import { analyzeTopicSheet, escapeHtml, parseTopicSheet } from "../src/prereq-scout.js";
 import { sampleTopicSheet } from "../src/sample-data.js";
 
 test("parseTopicSheet parses valid topics", () => {
@@ -13,6 +13,13 @@ test("parseTopicSheet parses valid topics", () => {
 test("analyzeTopicSheet finds unknown prerequisites", () => {
   const analysis = analyzeTopicSheet("A | Missing | 2 |");
   assert.match(analysis.errors[0], /Unknown prerequisite/);
+});
+
+test("escapeHtml escapes user-provided issue text", () => {
+  assert.equal(
+    escapeHtml('<img src=x onerror="alert(1)">'),
+    "&lt;img src=x onerror=&quot;alert(1)&quot;&gt;"
+  );
 });
 
 test("analyzeTopicSheet detects cycles", () => {
