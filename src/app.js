@@ -1,9 +1,10 @@
-import { sampleTopicSheet } from "./sample-data.js";
+import { starterSheets } from "./sample-data.js";
 import { analyzeTopicSheet, escapeHtml } from "./prereq-scout.js";
 
 const input = document.querySelector("#topic-input");
 const analyzeButton = document.querySelector("#analyze");
 const sampleButton = document.querySelector("#load-sample");
+const starterSelect = document.querySelector("#starter-sheet");
 const routeOutput = document.querySelector("#route-output");
 const bottleneckOutput = document.querySelector("#bottleneck-output");
 const graphOutput = document.querySelector("#graph-output");
@@ -45,9 +46,20 @@ function restoreDraft() {
   }
 }
 
+function getSelectedStarter() {
+  return starterSheets.find((starter) => starter.id === starterSelect.value) || starterSheets[0];
+}
+
+function renderStarterOptions() {
+  starterSelect.innerHTML = starterSheets
+    .map((starter) => `<option value="${escapeHtml(starter.id)}">${escapeHtml(starter.name)}</option>`)
+    .join("");
+}
+
 function setSample() {
-  input.value = sampleTopicSheet;
-  persistDraft("Sample loaded and saved locally.");
+  const starter = getSelectedStarter();
+  input.value = starter.sheet;
+  persistDraft(`${starter.name} starter loaded and saved locally.`);
   runAnalysis();
 }
 
@@ -126,6 +138,8 @@ input.addEventListener("input", () => {
   window.clearTimeout(saveTimer);
   saveTimer = window.setTimeout(() => persistDraft(), 250);
 });
+
+renderStarterOptions();
 
 const restoredDraft = restoreDraft();
 if (restoredDraft !== null) {

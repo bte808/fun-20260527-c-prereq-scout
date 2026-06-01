@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { analyzeTopicSheet, escapeHtml, parseTopicSheet } from "../src/prereq-scout.js";
-import { sampleTopicSheet } from "../src/sample-data.js";
+import { sampleTopicSheet, starterSheets } from "../src/sample-data.js";
 
 test("parseTopicSheet parses valid topics", () => {
   const parsed = parseTopicSheet("A | | 1 | note\nB | A | 3 | okay");
@@ -35,6 +35,18 @@ test("sample builds route and markdown", () => {
   assert.match(analysis.nextFocusHtml, /Repair first/);
   assert.match(analysis.markdown, /## Next Focus/);
   assert.match(analysis.markdown, /## Study Route/);
+});
+
+test("starter sheets are unique and analyzable", () => {
+  assert.ok(starterSheets.length >= 3);
+  assert.equal(new Set(starterSheets.map((starter) => starter.id)).size, starterSheets.length);
+
+  for (const starter of starterSheets) {
+    const analysis = analyzeTopicSheet(starter.sheet);
+    assert.equal(analysis.errors.length, 0, starter.name);
+    assert.ok(analysis.topics.length >= 5, starter.name);
+    assert.ok(analysis.nextFocus, starter.name);
+  }
 });
 
 test("next focus prioritizes input issues before study advice", () => {

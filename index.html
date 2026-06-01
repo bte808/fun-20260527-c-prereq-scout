@@ -22,7 +22,11 @@
           log you can export.
         </p>
         <div class="hero-actions">
-          <button id="load-sample" type="button">Load sample</button>
+          <label class="starter-control" for="starter-sheet">
+            <span>Starter sheet</span>
+            <select id="starter-sheet"></select>
+          </label>
+          <button id="load-sample" type="button">Load starter</button>
           <button id="analyze" class="primary" type="button">Build plan</button>
         </div>
       </section>
@@ -71,7 +75,7 @@
             <p>Start with blockers, then move through unlocked topics.</p>
           </div>
           <div id="route-output" class="list-stack empty-state">
-            Load the sample or paste your own sheet to begin.
+            Load a starter or paste your own sheet to begin.
           </div>
         </article>
 

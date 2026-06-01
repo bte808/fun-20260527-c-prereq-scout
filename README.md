@@ -4,8 +4,11 @@ Prereq Scout is a small local study tool for course review and research-method r
 
 It runs entirely in the browser with static HTML, CSS, and JavaScript. No login, model key, upload, or private environment is required.
 
+Live demo: <https://bte808.github.io/fun-20260527-c-prereq-scout/>
+
 ## What It Can Do
 
+- Start from starter sheets for measurement labs, exam review, or paper-method reading
 - Parse a plain-text topic sheet: `Topic | prereq1, prereq2 | confidence 0-4 | note`
 - Detect missing prerequisites and prerequisite cycles
 - Highlight low-confidence bottlenecks that block later topics
@@ -62,7 +65,7 @@ The validation covers parsing, missing prerequisites, cycle detection, route gen
 
 ## Core Usage
 
-1. Load the sample to see the format.
+1. Pick a starter sheet that is close to your situation.
 2. Replace the sample with your own chapter or methods topic list.
 3. Rate each topic from `0` to `4`.
 4. Build the plan.
@@ -70,8 +73,8 @@ The validation covers parsing, missing prerequisites, cycle detection, route gen
 6. Copy or download the Markdown plan into your notes.
 
 Your topic sheet is saved only in this browser's local storage, so a refresh will
-bring back the latest draft without uploading it anywhere. Use **Load sample** if
-you want to overwrite the draft with the bundled example again.
+bring back the latest draft without uploading it anywhere. Use **Load starter**
+if you want to overwrite the draft with one of the bundled examples again.
 
 Example input:
 

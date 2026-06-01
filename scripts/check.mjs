@@ -47,6 +47,14 @@ if (!readme.includes("local storage") || !app.includes("prereq-scout-topic-sheet
   throw new Error("Local draft persistence is not documented and wired");
 }
 
+if (!index.includes("starter-sheet") || !app.includes("starterSheets")) {
+  throw new Error("Starter sheet selector is not wired");
+}
+
+if (!readme.includes("starter sheets")) {
+  throw new Error("README should explain the starter sheets");
+}
+
 if (!css.includes("@media (max-width: 560px)")) {
   throw new Error("Mobile layout media query is missing");
 }

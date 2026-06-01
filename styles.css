@@ -26,6 +26,7 @@ body {
 }
 
 button,
+select,
 textarea,
 code {
   font: inherit;
@@ -95,6 +96,30 @@ button.primary {
   background: var(--accent);
   color: white;
   border-color: transparent;
+}
+
+.starter-control {
+  display: grid;
+  gap: 0.25rem;
+  min-width: min(15rem, 100%);
+}
+
+.starter-control span {
+  color: var(--accent-strong);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.starter-control select {
+  width: 100%;
+  min-height: 2.85rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fffaf2;
+  color: var(--ink);
+  padding: 0.6rem 0.85rem;
 }
 
 .panel {
@@ -308,6 +333,11 @@ button.primary {
 
   h1 {
     font-size: 2.45rem;
+  }
+
+  .hero-actions > button,
+  .starter-control {
+    width: 100%;
   }
 
   .graph-shell svg {
